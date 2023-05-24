@@ -2,7 +2,7 @@
 
 build_dir="$PWD/build"
 dist_dir="$PWD/dist"
-package_name="window-opener"
+package_name="github-toc-sidebar"
 manifest_path="public/manifest.json"
 
 version=$(grep '"version' "$manifest_path" | grep -Eo '\d.\d.\d')

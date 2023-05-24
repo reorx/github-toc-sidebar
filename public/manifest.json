@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GitHub TOC Sidebar",
-  "description": "Put the GitHub TOC in the sidebar",
+  "description": "Put the GitHub README TOC in the sidebar",
   "version": "1.0.0",
   "icons": {
     "16": "icon.png",
