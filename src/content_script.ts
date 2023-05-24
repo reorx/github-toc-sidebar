@@ -1,20 +1,3 @@
-import { colors, getLogger } from './utils/log';
-
-
-const lg = getLogger('content_script', colors.bgYellowBright)
-
-lg.info('content_script.ts')
-
-chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-  if (msg.color) {
-    lg.log("Receive color = " + msg.color);
-    document.body.style.backgroundColor = msg.color;
-    sendResponse("Change color to " + msg.color);
-  } else {
-    sendResponse("Color message is none.");
-  }
-});
-
 const className = 'toc-sidebar'
 
 class TocManager {
@@ -45,16 +28,20 @@ function main() {
     return
   }
   /* Normal structure:
-  <elDetails>
-    <elTocButton/>
-    <elToc>
-  <elDetails/>
+  <elDetailsContainer>
+    <elDetails>
+      <elTocButton/>
+      <elToc/>
+    </elDetails>
+  </elDetailsContainer>
 
   Sidebar structure:
-  <elDetails>
-    <elToc>
-  <elDetails/>
-  <elToc>
+  <elDetailsContainer>
+    <elDetails>
+      <elTocButton/>
+    </elDetails>
+  </elDetailsContainer>
+  <elToc/>
   */
   const elDetails = document.querySelector('#readme details')!
   const elDetailsContainer = elDetails.parentElement!

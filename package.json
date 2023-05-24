@@ -13,13 +13,6 @@
   },
   "author": "Reorx <novoreorx@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "cash-dom": "^8.1.3",
-    "chalk": "^5.0.1",
-    "delegate-it": "^3.0.0",
-    "loglevel": "^1.8.0",
-    "loglevel-plugin-prefix": "^0.8.4"
-  },
   "devDependencies": {
     "@babel/core": "^7.17.12",
     "@babel/preset-env": "^7.17.12",
