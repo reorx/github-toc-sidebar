@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub TOC Sidebar",
+  "description": "Put the GitHub TOC in the sidebar",
+  "version": "1.0.0",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html"
+  },
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/*"],
+      "css": ["css/content_style.css"],
+      "js": ["js/content_script.js"]
+    }
+  ],
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "activeTab"
+  ]
+}

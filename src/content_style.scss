@@ -1,0 +1,12 @@
+@media (min-width: 544px) {
+  .SelectMenu.toc-sidebar {
+    position: absolute;
+    top: 100%;
+    right: calc(0px - var(--Layout-gutter));
+    transform: translateX(100%);
+
+    .SelectMenu-modal {
+      max-height: max(calc(50vh - var(--Layout-gutter)), 300px) !important;
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "es6",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "rootDir": "src",
+    "allowJs": true,
+    "sourceMap": false,
+    "noEmitOnError": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": true,
+
+    // Required for tsconfig-paths-webpack-plugin
+    // "baseUrl": ".",
+    // Enable constraints that allow a TypeScript project to be used with project references.
+    // "composite": true,
+  },
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+	  "**/__tests__",
+    "node_modules",
+    "lib",
+    "jest-config.js",
+  ]
+}
