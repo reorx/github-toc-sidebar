@@ -17,7 +17,7 @@ Install it on [Chrome Web Store](https://chrome.google.com/webstore/detail/githu
 - Automatically display the native README TOC on the right side while scrolling down.
 - Hide the README TOC after the sidebar shows up when you scroll up
 
-> **Notes**
+> **Note**
 > 1. This extension is designed solely to enhance the browsing experience for GitHub README.
 >     If you need a universal TOC extension, please refer to other options such as Smart TOC or Simple Outliner.
 > 2. This extension utilizes the native README TOC provided by GitHub,
