@@ -24,6 +24,17 @@ Install it on [Chrome Web Store](https://chrome.google.com/webstore/detail/githu
 >    which makes it look beautiful and easy to implement.
 
 
+## Thing you should know
+
+Please note that this extension only works when all the circumstances are met:
+1. You are viewing the home page of a project on GitHub, meaning that the URL must match the format https://github.com/<user>/<project>, not subsidiary pages like https://github.com/<user>/<project>/blob/master/readme.md
+2. The project has a readme file written in a markup language such as Markdown or RST
+3. The readme file has headings that split content into multiple sections with titles
+4. You scroll down the page further than the bottom of the right sidebar
+
+To test if this extension works, you can open this page as an example: https://github.com/reorx/awesome-chatgpt-api
+
+
 ## Configuration
 
 I haven't added any configurations since it totally fulfills my need.
