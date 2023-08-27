@@ -1,3 +1,4 @@
+// "New Repository Overview" enabled
 @media (min-width: 544px) {
   .SelectMenu.toc-sidebar {
     position: absolute;
@@ -9,4 +10,20 @@
       max-height: max(calc(50vh - var(--Layout-gutter)), 300px) !important;
     }
   }
+
+  section[aria-labelledby="outline-id"] {
+    display: none;
+  }
+
+  .toc-cloned {
+    position: absolute;
+    top: 100px;
+    right: calc(0px - var(--Layout-gutter));
+    transform: translateX(100%);
+    display: none;
+  }
+  .toc-cloned.toc-sidebar {
+    display: block;
+  }
+
 }
