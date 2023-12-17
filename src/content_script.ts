@@ -122,7 +122,22 @@ function handleNewReadme() {
   document.addEventListener('scroll', onScroll)
 }
 
+const addCSS = (css: string) => {
+  const styleElement: HTMLStyleElement = document.createElement('style');
+  document.head.appendChild(styleElement);
+  const sheet: CSSStyleSheet = styleElement.sheet as CSSStyleSheet;
+  sheet.insertRule(css, sheet.cssRules.length);
+};
+
 function main() {
+  // check if the url matches \/\w+/\w+$\
+  const projectPathRegex = /^\/[\w-]+\/[\w-]+\/?$/gm;
+  if (!projectPathRegex.exec(window.location.pathname)) {
+    console.log('not a project home path')
+    return
+  }
+
+
   let elToc = document.querySelector('#readme details > details-menu')
 
   if (elToc) {
@@ -135,6 +150,7 @@ function main() {
       console.warn('toc button not found, skip')
       return
     }
+    addCSS('section[aria-labelledby="outline-id"] { display: none; }')
     setTimeout(() => {
       (tocButton as HTMLButtonElement).click()
       setTimeout(handleNewReadme, 100)
