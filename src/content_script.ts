@@ -2,9 +2,15 @@ const tocClassName = 'toc-sidebar'
 const tocContentClassName = 'toc-sidebar-content'
 const stickyClassName = 'sticky-top'
 
-function createToC() {
-  const article = document.querySelector('article') as HTMLElement
-  const headings = article.querySelectorAll('h1, h2, h3, h4, h5')
+function getHeadingHref(h: Element) {
+    const a = h.querySelector('a.anchor') as HTMLAnchorElement|null
+    if (!a) {
+      return
+    }
+    return a.getAttribute('href')
+}
+
+function createToC(headings: NodeListOf<Element>) {
 
   const toc = document.createElement('div')
   const ul = document.createElement('ul')
@@ -23,14 +29,67 @@ function createToC() {
   }
 
   for (const h of headings) {
-    const a = h.querySelector('a.anchor') as HTMLAnchorElement|null
-    if (!a) {
+    const href = getHeadingHref(h)
+    if (!href) {
       continue
     }
-    const href = a.getAttribute('href')!
     createLi((h.textContent || '').trim(), href, h.tagName.toLowerCase())
   }
   return toc
+}
+
+function activeTocLinkOnScroll(toc: HTMLDivElement, headings: NodeListOf<Element>) {
+    const activeClass = 'active';
+
+    function getLinkByHeading(heading: Element) {
+      const href = getHeadingHref(heading);
+      if (!href) return
+      return toc.querySelector(`a[href="${href}"]`);
+    }
+
+    function getOffsetTop(heading: Element) {
+      if (!heading.getClientRects().length) {
+        return 0;
+      }
+      let rect = heading.getBoundingClientRect();
+      return rect.top
+    }
+
+    let activeHeading: Element = headings[0];
+
+    // makes the heading active before it reaches the top of the screen
+    const offsetTopBuffer = 60;
+
+    const onScroll = () => {
+      const passedHeadings: Array<Element> = [];
+      for (const h of headings) {
+        if (getOffsetTop(h) < offsetTopBuffer) {
+          passedHeadings.push(h)
+        } else {
+          break;
+        }
+      }
+      let newActiveHeading: Element;
+      if (passedHeadings.length > 0) {
+        newActiveHeading = passedHeadings[passedHeadings.length - 1];
+      } else {
+        newActiveHeading = headings[0];
+      }
+      if (activeHeading != newActiveHeading) {
+        getLinkByHeading(activeHeading)?.parentElement!.classList.remove(activeClass);
+        activeHeading = newActiveHeading;
+        getLinkByHeading(activeHeading)?.parentElement!.classList.add(activeClass);
+      }
+    }
+
+    let timer: NodeJS.Timeout|null = null;
+    const scrollListener = () => {
+      if (timer !== null) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(onScroll, 50)
+    }
+    window.addEventListener('scroll', scrollListener, false);
 }
 
 function main() {
@@ -51,8 +110,12 @@ function main() {
   title.textContent = 'Outline';
   section.appendChild(title)
 
+  // get article and headings
+  const article = document.querySelector('article') as HTMLElement
+  const headings = article.querySelectorAll('h1, h2, h3, h4, h5')
+
   // create toc
-  const toc = createToC()
+  const toc = createToC(headings)
   toc.classList.add(tocContentClassName)
   section.appendChild(toc)
 
@@ -87,6 +150,9 @@ function main() {
   }
 
   document.addEventListener('scroll', onScroll)
+
+  // handle
+  activeTocLinkOnScroll(toc, headings)
 }
 
 main()

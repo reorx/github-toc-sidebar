@@ -10,7 +10,9 @@
     }
     .toc-sidebar-content {
       padding-top: 8px;
-      margin-left: -8px;
+      // if we want to control the max height of the sidebar, however, it will make the .active blue bar disappear
+      // max-height: calc(100vh - 130px);
+      // overflow-y: auto;
     }
     a {
       color: inherit;
@@ -26,14 +28,26 @@
         border-radius: 6px;
         cursor: pointer;
         appearance: none;
-        &:hover {
-          background-color: rgba(177, 186, 196, 0.12);
-          box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px max(1px, 0.0625rem) inset;
-        }
+        position: relative;
       }
       li > a {
         padding: 6px 8px;
         display: flex;
+      }
+      li:hover, li.active {
+        background-color: rgba(177, 186, 196, 0.12);
+        box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px max(1px, 0.0625rem) inset;
+      }
+
+      li.active::after {
+        position: absolute;
+        top: calc(50% - 12px);
+        left: -8px;
+        width: 4px;
+        height: 24px;
+        content: "";
+        background-color: rgb(9, 105, 218);
+        border-radius: 6px;
       }
     }
     .toc-label-h1 {
