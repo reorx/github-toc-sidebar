@@ -1,53 +1,17 @@
-// "New Repository Overview" enabled
 @media (min-width: 544px) {
-  .SelectMenu.toc-sidebar {
-    position: absolute;
-    top: 100%;
-    right: calc(0px - var(--Layout-gutter));
-    transform: translateX(100%);
-
-    .SelectMenu-modal {
-      max-height: max(calc(50vh - var(--Layout-gutter)), 300px) !important;
-    }
-  }
-
-  section.toc-cloned {
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 16px;
-
-    > h2 {
-      margin-bottom: 8px;
-    }
-
-    // filter input
-    > div:first-child {
-      padding-left: 0;
-      padding-right: 0;
-      display: none;
-    }
-    nav {
-      margin-left: -8px;
-    }
-    nav > ul > li {
-      margin-left: 0;
-      margin-right: 0;
-      width: auto;
-    }
-  }
-
-  .toc-cloned.toc-sidebar {
-    nav {
-      position: fixed;
-      top: 0;
-    }
-  }
-
   $indent-unit: 16px;
 
-  div.toc-sidebar {
+  .toc-sidebar {
+    padding: 16px 0;
     color: var(--fgColor-default, var(--color-fg-default));
     font-size: 14px;
+    h2 {
+      margin-bottom: 8px;
+    }
+    .toc-sidebar-content {
+      padding-top: 8px;
+      margin-left: -8px;
+    }
     a {
       color: inherit;
       font-size: inherit;
@@ -72,21 +36,25 @@
         display: flex;
       }
     }
-    .outline-label-h1 {
+    .toc-label-h1 {
       font-weight: 600;
     }
-    .outline-label-h2 {
+    .toc-label-h2 {
       padding-left: $indent-unit * 1;
     }
-    .outline-label-h3 {
+    .toc-label-h3 {
       padding-left: $indent-unit * 2;
     }
-    .outline-label-h4 {
+    .toc-label-h4 {
       padding-left: $indent-unit * 3;
     }
-    .outline-label-h5 {
+    .toc-label-h5 {
       padding-left: $indent-unit * 4;
     }
   }
 
+  .sticky-top {
+    position: fixed;
+    top: 0;
+  }
 }
