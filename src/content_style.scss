@@ -11,15 +11,36 @@
     }
   }
 
-  .toc-cloned {
-    position: absolute;
-    top: 100px;
-    right: calc(0px - var(--Layout-gutter));
-    transform: translateX(100%);
-    display: none;
+  section.toc-cloned {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 16px;
+
+    > h2 {
+      margin-bottom: 8px;
+    }
+
+    // filter input
+    > div:first-child {
+      padding-left: 0;
+      padding-right: 0;
+      display: none;
+    }
+    nav {
+      margin-left: -8px;
+    }
+    nav > ul > li {
+      margin-left: 0;
+      margin-right: 0;
+      width: auto;
+    }
   }
+
   .toc-cloned.toc-sidebar {
-    display: block;
+    nav {
+      position: fixed;
+      top: 0;
+    }
   }
 
 }

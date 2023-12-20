@@ -2,20 +2,22 @@ const className = 'toc-sidebar'
 
 class TocManager {
   isShown: boolean
-  el: Element
+  el: HTMLElement
+  navEl: HTMLElement
 
-  constructor(el: Element) {
+  constructor(el: HTMLElement) {
     this.isShown = false
     this.el = el
+    this.navEl = el.querySelector('nav') as HTMLElement
   }
 
-  moveAfter(afterEl: Element, isShown: boolean) {
+  moveAfter(afterEl: HTMLElement, isShown: boolean) {
     console.log('move', this.el, 'after', afterEl, isShown)
     afterEl.parentNode?.insertBefore(this.el, afterEl.nextSibling);
     this.show(isShown)
   }
 
-  moveIn(inEl: Element, isShown: boolean) {
+  moveIn(inEl: HTMLElement, isShown: boolean) {
     console.log('move', this.el, 'in', inEl, isShown)
     inEl.appendChild(this.el)
     this.show(isShown)
@@ -23,15 +25,17 @@ class TocManager {
 
   show(isShown: boolean) {
     if (isShown) {
+      this.navEl.style.width = `${this.el.offsetWidth}px`
       this.el.classList.add(className)
     } else {
       this.el.classList.remove(className)
+      this.navEl.style.width = 'auto'
     }
     this.isShown = isShown
   }
 }
 
-function handleOldReadme(elToc: Element) {
+function handleOldReadme(elToc: HTMLElement) {
   console.log(`handle toc for "New Repository Overview" disabled`)
   /* Normal structure:
   <elDetailsContainer>
@@ -51,7 +55,7 @@ function handleOldReadme(elToc: Element) {
   */
   const elDetails = document.querySelector('#readme details')!
   const elDetailsContainer = elDetails.parentElement!
-  const elTocButton = document.querySelector('#readme details > summary')!
+  const elTocButton = document.querySelector('#readme details > summary')! as HTMLElement
 
   const elSidebarInner = document.querySelector('.Layout-sidebar > div')!
   const elSidebarInnerLast = elSidebarInner.lastElementChild!
@@ -75,7 +79,7 @@ function handleOldReadme(elToc: Element) {
   onScroll()
 }
 
-function handleNewReadme() {
+function handleNewReadme(tocButton: HTMLButtonElement) {
   console.log(`handle toc for "New Repository Overview" enabled`)
   /*
   New Repository Overview uses react portal to control the toc position, the structure is like:
@@ -91,25 +95,32 @@ function handleNewReadme() {
     console.warn('no toc found for "New Repository Overview" enabled')
     return
   }
-  const cloned = elToc.cloneNode(true) as Element
+  // hide the original outline
+  tocButton.click()
+
+  const cloned = elToc.cloneNode(true) as HTMLElement
   cloned.classList.add('toc-cloned')
   cloned.removeAttribute('aria-labelledby')
 
-  const tocButton = document.querySelector('button[aria-label="Outline"]')
-  tocButton!.parentNode!.appendChild(cloned)
+  const outlineHeading = document.createElement('h2');
+  outlineHeading.className = 'h4';
+  outlineHeading.textContent = 'Outline';
+  cloned.insertBefore(outlineHeading, cloned.children[1]);
+
+  //const tocButton = document.querySelector('button[aria-label="Outline"]')
+  //tocButton!.parentNode!.appendChild(cloned)
 
   //const elTocContainer = elToc.parentElement!
 
   const elSidebarInner = document.querySelector('.Layout-sidebar > div')!
-  const elSidebarInnerLast = elSidebarInner.lastElementChild!
-  console.log('inner last', elSidebarInnerLast)
+  elSidebarInner.appendChild(cloned)
 
   const tocManager = new TocManager(cloned)
 
 
   const onScroll = () => {
-    const rect = elSidebarInnerLast!.getBoundingClientRect();
-    // console.log('scroll', rect.top, rect.bottom)
+    const rect = outlineHeading.getBoundingClientRect();
+    console.log('scroll', rect.top, rect.bottom)
     if (rect.bottom < 0 && !tocManager.isShown) {
       // show toc
       tocManager.show(true)
@@ -138,22 +149,22 @@ function main() {
   }
 
 
-  let elToc = document.querySelector('#readme details > details-menu')
+  let elToc = document.querySelector('#readme details > details-menu') as HTMLElement
 
   if (elToc) {
     handleOldReadme(elToc)
   } else {
 
-    console.log('try for New Repository Overview enabled')
-    const tocButton = document.querySelector('button[aria-label="Outline"]')
+    console.log('New Repository Overview enabled!2')
+    const tocButton = document.querySelector('button[aria-label="Outline"]') as HTMLButtonElement
     if (!tocButton) {
-      console.warn('toc button not found, skip')
+      console.log('toc button not found, skip')
       return
     }
-    addCSS('section[aria-labelledby="outline-id"] { display: none; }')
+    //addCSS('section[aria-labelledby="outline-id"] { display: none; }')
     setTimeout(() => {
-      (tocButton as HTMLButtonElement).click()
-      setTimeout(handleNewReadme, 100)
+      tocButton.click()
+      setTimeout(() => handleNewReadme(tocButton), 100)
     }, 500)
   }
 }
