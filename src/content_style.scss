@@ -43,4 +43,50 @@
     }
   }
 
+  $indent-unit: 16px;
+
+  div.toc-sidebar {
+    color: var(--fgColor-default, var(--color-fg-default));
+    font-size: 14px;
+    a {
+      color: inherit;
+      font-size: inherit;
+      line-height: 20px;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+    ul {
+      list-style: none;
+      li {
+        border-radius: 6px;
+        cursor: pointer;
+        appearance: none;
+        &:hover {
+          background-color: rgba(177, 186, 196, 0.12);
+          box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px max(1px, 0.0625rem) inset;
+        }
+      }
+      li > a {
+        padding: 6px 8px;
+        display: flex;
+      }
+    }
+    .outline-label-h1 {
+      font-weight: 600;
+    }
+    .outline-label-h2 {
+      padding-left: $indent-unit * 1;
+    }
+    .outline-label-h3 {
+      padding-left: $indent-unit * 2;
+    }
+    .outline-label-h4 {
+      padding-left: $indent-unit * 3;
+    }
+    .outline-label-h5 {
+      padding-left: $indent-unit * 4;
+    }
+  }
+
 }

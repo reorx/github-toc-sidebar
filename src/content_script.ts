@@ -120,7 +120,7 @@ function handleNewReadme(tocButton: HTMLButtonElement) {
 
   const onScroll = () => {
     const rect = outlineHeading.getBoundingClientRect();
-    console.log('scroll', rect.top, rect.bottom)
+    // console.log('scroll', rect.top, rect.bottom)
     if (rect.bottom < 0 && !tocManager.isShown) {
       // show toc
       tocManager.show(true)
@@ -167,6 +167,43 @@ function main() {
       setTimeout(() => handleNewReadme(tocButton), 100)
     }, 500)
   }
+
+  const outline = createOutline()
+
+  const elSidebarInner = document.querySelector('.Layout-sidebar > div')!
+  elSidebarInner.appendChild(outline)
+}
+
+function createOutline() {
+  const article = document.querySelector('article') as HTMLElement
+  const headings = article.querySelectorAll('h1, h2, h3, h4, h5')
+
+  const outline = document.createElement('div')
+  outline.classList.add('toc-sidebar')
+  const ul = document.createElement('ul')
+  outline.appendChild(ul)
+
+  const createLi = (text: string, href: string, headingTag: string) => {
+    const li = document.createElement('li')
+      const a = document.createElement('a')
+      a.setAttribute('href', href)
+        const label = document.createElement('div')
+        label.classList.add(`outline-label-${headingTag}`)
+        label.innerText = text
+        a.appendChild(label)
+      li.appendChild(a)
+    ul.appendChild(li)
+  }
+
+  for (const h of headings) {
+    const a = h.querySelector('a.anchor') as HTMLAnchorElement|null
+    if (!a) {
+      continue
+    }
+    const href = a.getAttribute('href')!
+    createLi((h.textContent || '').trim(), href, h.tagName.toLowerCase())
+  }
+  return outline
 }
 
 main()
