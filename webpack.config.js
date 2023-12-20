@@ -1,14 +1,34 @@
 const webpack = require('webpack')
 const path = require('path')
+const fs = require('fs')
 const CopyPlugin = require('copy-webpack-plugin')
 const ExtReloader = require('@reorx/webpack-ext-reloader')
+const GenerateJsonPlugin = require('generate-json-webpack-plugin');
 const { merge } = require('webpack-merge')
 
 const rootDir = path.resolve(__dirname)
 const srcDir = path.join(rootDir, 'src')
 const destDir = path.join(rootDir, 'build')
 
-console.log('srcDir', srcDir)
+const isDev = process.env.NODE_ENV === 'development'
+
+const manifestPath = path.join(rootDir, 'manifest.json')
+const defaultManifest = JSON.parse(fs.readFileSync(manifestPath).toString())
+
+
+function getManifest() {
+  if (isDev) {
+    // add background for dev, so that the webpack-ext-reloader can work
+    return Object.assign({}, defaultManifest, {
+      "background": {
+        "service_worker": "js/background.js"
+      },
+    })
+  } else {
+    return defaultManifest
+  }
+}
+
 
 const common = {
   entry: {
@@ -66,6 +86,7 @@ const common = {
     new CopyPlugin({
       patterns: [{ from: path.join(rootDir, 'public'), to: destDir }],
     }),
+    new GenerateJsonPlugin('manifest.json', getManifest(), null, 2),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
@@ -75,7 +96,12 @@ const common = {
 
 function developmentConfig() {
   console.log('development config')
+
   const config = merge(common, {
+    // add background entry
+    entry: {
+      background: path.join(srcDir, 'background.ts'),
+    },
     // `eval` could not be used, see https://stackoverflow.com/questions/48047150/chrome-extension-compiled-by-webpack-throws-unsafe-eval-error
     devtool: 'cheap-module-source-map',
     mode: 'development',
@@ -84,14 +110,10 @@ function developmentConfig() {
         entries: {
           background: 'background',
           contentScript: ['content_script', 'content_style'],
-          extensionPage: ['custom_page'],
         },
       }),
     ],
   })
-
-  // background keeps the extension auto reloading
-  config.entry.background = path.join(srcDir, 'background.ts')
 
   if (process.env.MEASURE_SPEED) {
     const SpeedMeasurePlugin = require("speed-measure-webpack-plugin")
@@ -111,4 +133,4 @@ function productionConfig() {
 }
 
 
-module.exports = process.env.NODE_ENV === 'production' ? productionConfig() : developmentConfig()
+module.exports =  isDev ? developmentConfig() : productionConfig()
