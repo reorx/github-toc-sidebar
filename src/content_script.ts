@@ -16,8 +16,11 @@ function getHeadingHref(h: Element) {
 function createToC(headings: NodeListOf<Element>) {
 
   const toc = document.createElement('div')
+  const scrollWrapper = document.createElement('div')
+  scrollWrapper.classList.add('scroll-wrapper')
   const ul = document.createElement('ul')
-  toc.appendChild(ul)
+  toc.appendChild(scrollWrapper)
+  scrollWrapper.appendChild(ul)
 
   const createLi = (text: string, href: string, headingTag: string) => {
     const li = document.createElement('li')

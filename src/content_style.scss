@@ -1,4 +1,5 @@
 $indent-unit: 16px;
+$gradient-height: 48px;
 
 .toc-sidebar {
   padding: 16px 0;
@@ -7,13 +8,31 @@ $indent-unit: 16px;
   h2 {
     margin-bottom: 8px;
   }
+
   .toc-sidebar-content {
-    padding-top: 8px;
-    // left padding is to reserve space for the active highlight, otherwise it will be covered by overflow
-    padding-left: 8px;
-    max-height: calc(100vh - 130px);
-    overflow-y: auto;
+    position: relative;
+    &.sticky-top {
+      position: fixed;
+      top: 0;
+    }
+
+    .scroll-wrapper {
+      padding-top: 8px;
+      // left padding is to reserve space for the active highlight, otherwise it will be covered by overflow
+      padding-left: 8px;
+      max-height: calc(100vh - 130px);
+      overflow-y: auto;
+      position: relative;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: $gradient-height;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, var(--bgColor-default, var(--color-canvas-default)) 100%);
+    }
   }
+
   a {
     color: inherit;
     font-size: inherit;
@@ -24,6 +43,7 @@ $indent-unit: 16px;
   }
   ul {
     list-style: none;
+    margin-bottom: $gradient-height;
     li {
       border-radius: 6px;
       cursor: pointer;
@@ -67,10 +87,6 @@ $indent-unit: 16px;
   }
 }
 
-.sticky-top {
-  position: fixed;
-  top: 0;
-}
 
 @media (max-width: 760px) {
   .toc-sidebar {
