@@ -3,8 +3,13 @@
 build_dir="$PWD/build"
 dist_dir="$PWD/dist"
 package_name="github-toc-sidebar"
-manifest_path="public/manifest.json"
+manifest_path="$build_dir/manifest.json"
 
+# build
+rm -rf "$build_dir"
+npm run build
+
+# version
 version=$(grep '"version' "$manifest_path" | grep -Eo '\d.\d.\d')
 if [ -z "$version" ]; then
     echo "cannot get version"
