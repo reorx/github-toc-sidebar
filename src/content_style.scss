@@ -9,9 +9,10 @@ $indent-unit: 16px;
   }
   .toc-sidebar-content {
     padding-top: 8px;
-    // if we want to control the max height of the sidebar, however, it will make the .active blue bar disappear
-    // max-height: calc(100vh - 130px);
-    // overflow-y: auto;
+    // left padding is to reserve space for the active highlight, otherwise it will be covered by overflow
+    padding-left: 8px;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
   }
   a {
     color: inherit;

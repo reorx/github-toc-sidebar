@@ -55,7 +55,16 @@ function activeTocLinkOnScroll(toc: HTMLDivElement, headings: NodeListOf<Element
       return rect.top
     }
 
+    function activate(heading: Element, lastActiveHeading?: Element) {
+      if (lastActiveHeading) {
+        getLinkByHeading(lastActiveHeading)?.parentElement!.classList.remove(activeClass);
+      }
+      getLinkByHeading(heading)?.parentElement!.classList.add(activeClass);
+    }
+
+    // active the first heading at the beginning
     let activeHeading: Element = headings[0];
+    activate(activeHeading)
 
     // makes the heading active before it reaches the top of the screen
     const offsetTopBuffer = 60;
@@ -69,27 +78,22 @@ function activeTocLinkOnScroll(toc: HTMLDivElement, headings: NodeListOf<Element
           break;
         }
       }
-      let newActiveHeading: Element;
-      if (passedHeadings.length > 0) {
-        newActiveHeading = passedHeadings[passedHeadings.length - 1];
-      } else {
-        newActiveHeading = headings[0];
-      }
-      if (activeHeading != newActiveHeading) {
-        getLinkByHeading(activeHeading)?.parentElement!.classList.remove(activeClass);
-        activeHeading = newActiveHeading;
-        getLinkByHeading(activeHeading)?.parentElement!.classList.add(activeClass);
+      let nextActiveHeading = passedHeadings.length > 0 ? passedHeadings[passedHeadings.length - 1] : null
+      if (nextActiveHeading && nextActiveHeading != activeHeading) {
+        activate(nextActiveHeading, activeHeading)
+        activeHeading = nextActiveHeading
       }
     }
 
     let timer: NodeJS.Timeout|null = null;
     const scrollListener = () => {
+      // throttle onScroll call
       if (timer !== null) {
         clearTimeout(timer)
       }
       timer = setTimeout(onScroll, 50)
     }
-    window.addEventListener('scroll', scrollListener, false);
+    document.addEventListener('scroll', scrollListener, false);
 }
 
 function main() {
