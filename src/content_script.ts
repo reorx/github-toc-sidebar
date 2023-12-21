@@ -1,3 +1,6 @@
+import throttle from 'lodash/throttle';
+
+
 const tocClassName = 'toc-sidebar'
 const tocContentClassName = 'toc-sidebar-content'
 const stickyClassName = 'sticky-top'
@@ -78,22 +81,14 @@ function activeTocLinkOnScroll(toc: HTMLDivElement, headings: NodeListOf<Element
           break;
         }
       }
-      let nextActiveHeading = passedHeadings.length > 0 ? passedHeadings[passedHeadings.length - 1] : null
+      let nextActiveHeading = passedHeadings.length > 0 ? passedHeadings[passedHeadings.length - 1] : headings[0]
       if (nextActiveHeading && nextActiveHeading != activeHeading) {
         activate(nextActiveHeading, activeHeading)
         activeHeading = nextActiveHeading
       }
     }
 
-    let timer: NodeJS.Timeout|null = null;
-    const scrollListener = () => {
-      // throttle onScroll call
-      if (timer !== null) {
-        clearTimeout(timer)
-      }
-      timer = setTimeout(onScroll, 50)
-    }
-    document.addEventListener('scroll', scrollListener, false);
+    document.addEventListener('scroll', throttle(onScroll, 100));
 }
 
 function main() {

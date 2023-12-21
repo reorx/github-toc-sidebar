@@ -19,6 +19,7 @@
     "@babel/preset-typescript": "^7.17.12",
     "@reorx/webpack-ext-reloader": "^1.4.1",
     "@types/chrome": "0.0.217",
+    "@types/lodash.throttle": "^4.1.9",
     "@types/node": "^18.15.11",
     "@typescript-eslint/eslint-plugin": "^5.24.0",
     "@typescript-eslint/parser": "^5.24.0",
@@ -28,6 +29,7 @@
     "css-loader": "^6.7.1",
     "eslint": "^8.15.0",
     "eslint-plugin-react": "^7.29.4",
+    "generate-json-webpack-plugin": "^2.0.0",
     "html-webpack-plugin": "^5.5.0",
     "sass": "^1.58.3",
     "sass-loader": "^13.2.0",
@@ -41,6 +43,6 @@
     "webpack-merge": "^5.0.0"
   },
   "dependencies": {
-    "generate-json-webpack-plugin": "^2.0.0"
+    "lodash.throttle": "^4.1.1"
   }
 }
