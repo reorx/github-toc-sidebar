@@ -4,13 +4,25 @@ import throttle from 'lodash/throttle';
 const tocClassName = 'toc-sidebar'
 const tocContentClassName = 'toc-sidebar-content'
 const stickyClassName = 'sticky-top'
+const DEBUG = process.env.NODE_ENV === 'development'
+
+function debugLog(...args: any[]) {
+  if (!DEBUG) return
+  console.log.apply(null, args)
+}
 
 function getHeadingHref(h: Element) {
-    const a = h.querySelector('a.anchor') as HTMLAnchorElement|null
-    if (!a) {
-      return
-    }
-    return a.getAttribute('href')
+  let a: HTMLAnchorElement|null = null
+  if (h.parentElement) {
+    a = h.parentElement.querySelector('a.anchor')
+  } else {
+    a = h.querySelector('a.anchor')
+  }
+  debugLog('getHeadingHref', a)
+  if (!a) {
+    return
+  }
+  return a.getAttribute('href')
 }
 
 function createToC(headings: NodeListOf<Element>) {
@@ -23,6 +35,7 @@ function createToC(headings: NodeListOf<Element>) {
   scrollWrapper.appendChild(ul)
 
   const createLi = (text: string, href: string, headingTag: string) => {
+    debugLog('createLi', text, href, headingTag)
     const li = document.createElement('li')
       const a = document.createElement('a')
       a.setAttribute('href', href)
@@ -36,6 +49,7 @@ function createToC(headings: NodeListOf<Element>) {
 
   for (const h of headings) {
     const href = getHeadingHref(h)
+    debugLog('heading and href', h, href)
     if (!href) {
       continue
     }
@@ -105,25 +119,31 @@ function main() {
   // create section that will be added to sidebar later
   const section = document.createElement('section')
   section.classList.add(tocClassName)
+  debugLog('create section', section)
 
   // create title for section
   const title = document.createElement('h2');
   title.className = 'h4';
   title.textContent = 'Outline';
   section.appendChild(title)
+  debugLog('create title', title)
 
   // get article and headings
   const article = document.querySelector('article') as HTMLElement
   const headings = article.querySelectorAll('h1, h2, h3, h4, h5')
+  debugLog('article', article)
+  debugLog('headings', headings)
 
   // create toc
   const toc = createToC(headings)
   toc.classList.add(tocContentClassName)
   section.appendChild(toc)
+  debugLog('toc', toc)
 
   // add section to sidebar
   const elSidebarInner = document.querySelector('.Layout-sidebar > div')!
   elSidebarInner.appendChild(section)
+  debugLog('sidebar inner', elSidebarInner)
 
   let isSticky = false
   const toggleSticky = (flag: boolean) => {
