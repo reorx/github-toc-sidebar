@@ -107,6 +107,7 @@ function developmentConfig() {
     mode: 'development',
     plugins: [
       new ExtReloader({
+        port: 9310,
         entries: {
           background: 'background',
           contentScript: ['content_script', 'content_style'],
