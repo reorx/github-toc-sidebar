@@ -73,9 +73,10 @@ $transition-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
       background-color: rgba(177, 186, 196, 0.12);
       box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px max(1px, 0.0625rem) inset;
       border-radius: 6px;
+      position: relative;
     }
 
-    li.active::after {
+    li.active > a::after {
       position: absolute;
       top: calc(50% - 12px);
       left: -8px;
