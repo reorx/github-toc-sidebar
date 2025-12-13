@@ -1,5 +1,8 @@
 $indent-unit: 16px;
 $gradient-height: 48px;
+$transition-duration-normal: 0.3s;
+$transition-duration-fast: 0.2s;
+$transition-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
 .toc-sidebar {
   padding: 16px 0;
@@ -20,7 +23,7 @@ $gradient-height: 48px;
       padding-top: 8px;
       // left padding is to reserve space for the active highlight, otherwise it will be covered by overflow
       padding-left: 8px;
-      max-height: calc(100vh - 130px);
+      max-height: calc(100vh - 10px);
       overflow-y: auto;
       position: relative;
     }
@@ -41,9 +44,13 @@ $gradient-height: 48px;
       text-decoration: none;
     }
   }
-  ul {
+  // Only apply to top-level ul, not nested ones
+  > .toc-sidebar-content > .scroll-wrapper > ul {
     list-style: none;
     margin-bottom: $gradient-height;
+  }
+
+  ul {
     li {
       border-radius: 6px;
       cursor: pointer;
@@ -53,10 +60,19 @@ $gradient-height: 48px;
     li > a {
       padding: 6px 8px;
       display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    li:hover, li.active {
+    // Only show hover/active background on direct hover, not on parent items
+    li > a:hover {
       background-color: rgba(177, 186, 196, 0.12);
       box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px max(1px, 0.0625rem) inset;
+      border-radius: 6px;
+    }
+    li.active > a {
+      background-color: rgba(177, 186, 196, 0.12);
+      box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px max(1px, 0.0625rem) inset;
+      border-radius: 6px;
     }
 
     li.active::after {
@@ -70,20 +86,71 @@ $gradient-height: 48px;
       border-radius: 6px;
     }
   }
+
+  // Collapse icon styles
+  .collapse-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    font-size: 24px;
+    opacity: 0;
+    transition: transform $transition-duration-fast $transition-easing-standard, opacity $transition-duration-fast ease;
+    user-select: none;
+    transform: rotate(90deg);
+    
+    &.has-children {
+      opacity: 0.6;
+      cursor: pointer;
+      
+      &:hover {
+        opacity: 1;
+      }
+      
+      &.collapsed {
+        transform: rotate(0deg);
+      }
+    }
+  }
+
+  // Nested children styles (wrapper div)
+  .toc-children {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows $transition-duration-normal $transition-easing-standard, 
+                margin-top $transition-duration-normal $transition-easing-standard,
+                opacity $transition-duration-normal $transition-easing-standard;
+    margin-top: 4px;
+    opacity: 1;
+    
+    &.collapsed {
+      grid-template-rows: 0fr;
+      margin-top: 0;
+      opacity: 0;
+    }
+    
+    // This wrapper is needed for grid animation to work properly
+    > * {
+      overflow: hidden;
+      min-height: 0;
+    }
+    
+    // The actual UL inside the wrapper
+    ul {
+      list-style: none;
+      margin-bottom: 0;
+      padding-left: $indent-unit;
+      
+      li {
+        margin-left: 0;
+      }
+    }
+  }
+  
   .toc-label-h1 {
     font-weight: 600;
-  }
-  .toc-label-h2 {
-    padding-left: $indent-unit * 1;
-  }
-  .toc-label-h3 {
-    padding-left: $indent-unit * 2;
-  }
-  .toc-label-h4 {
-    padding-left: $indent-unit * 3;
-  }
-  .toc-label-h5 {
-    padding-left: $indent-unit * 4;
   }
 }
 
